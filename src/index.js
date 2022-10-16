@@ -1,18 +1,22 @@
-//import 'dotenv/config'
+import 'dotenv/config'
 import express from 'express'
 import 'express-async-errors'
 import cors from 'cors'
-import { sendDataResponse } from './utils/responses'
+import { sendDataResponse } from './utils/responses.js'
 
 //Create a new express application
 const app = express()
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-//Tell express we want to use the morgan library
-app.use(morgan("dev"))
-//Tell express we want to use the cors library
-app.use(cors())
+
+//every router here
+
+app.get('/', (req, res) => {
+    res.status(200).json({
+      status: 'sucess'
+    })
+  })
 
 app.get('*', (req, res) => {
     res.status(404).json({
@@ -35,6 +39,6 @@ app.get('*', (req, res) => {
   const port = process.env.PORT || 4000
   
   app.listen(port, () => {
-    console.log(`\n Server is running on port ${port}\n`)
+    console.log(`\n Server is running on port http://localhost:${port}\n`)
   })
   

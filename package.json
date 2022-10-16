@@ -1,12 +1,16 @@
 {
   "name": "test-project",
   "version": "1.0.0",
+  "type": "module",
   "description": "Server Test Set Up",
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "prepare": "husky install"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   },
   "repository": {
     "type": "git",
@@ -20,12 +24,12 @@
   "homepage": "https://github.com/mnmin/Test-Project#readme",
   "dependencies": {
     "@prisma/client": "^4.4.0",
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "jsonwebtoken": "^8.5.1",
-    "morgan": "^1.10.0",
-    "prepare": "husky install"
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
     "husky": "^8.0.1",
