@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/mnmin/Test-Project#readme",
   "dependencies": {
-    "express": "^4.18.2"
-  },
-  "devDependencies": {}
+    "express": "^4.18.2",
+    "morgan": "^1.10.0"
+  }
 }
