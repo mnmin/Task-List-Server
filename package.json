@@ -18,5 +18,6 @@
   "homepage": "https://github.com/mnmin/Test-Project#readme",
   "dependencies": {
     "express": "^4.18.2"
-  }
+  },
+  "devDependencies": {}
 }
