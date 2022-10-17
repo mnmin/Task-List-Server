@@ -6,7 +6,7 @@ const prisma = new PrismaClient()
 async function seed() {
     const password = await bcrypt.hash('123', 2)
 
-    const userIterator = 2
+    const userIterator = 3
 
     const users = []
     const createUser = async (email, password, firstName, lastName) => {
@@ -25,9 +25,12 @@ async function seed() {
         return newUser
     }
 
-    for (let i = 1; i < userIterator; i++) {
+    for (let i = 1; i <= userIterator; i++) {
         users.push(await createUser(
-            "min@min.com", "123", "a", "b"
+            `user${i}@user.com`,
+            password,
+            `firstName${i}`,
+            `lastName${i}`,
         ))
       }
     
