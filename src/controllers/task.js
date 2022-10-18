@@ -34,7 +34,7 @@ export const getAllTasks = async (req, res) => {
     const allTasks = await dbClient.task.findMany();
     return res.status(200).json({ allTasks });
   } catch (err) {
-    return res.status(400).json({ err: "Unable to find Tasks" });
+    return res.status(404).json({ err: "Unable to find Tasks" });
   }
 };
 
@@ -56,7 +56,7 @@ export const updateTaskById = async (req, res) => {
   // console.log("I'm here");
   // console.log("Found Task", foundTask);
   if (!foundTask) {
-    return res.status(400).json("Unable to find task to update");
+    return res.status(404).json("Unable to find task to update");
   }
   try {
     const updatedTask = await dbClient.task.update({
@@ -81,7 +81,7 @@ export const deleteTaskById = async (req, res) => {
   });
 
   if (!foundTask) {
-    return res.status(400).json("Unable to find task to delete");
+    return res.status(404).json("Unable to find task to delete");
   }
 
   try {

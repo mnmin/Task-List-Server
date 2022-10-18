@@ -20,7 +20,7 @@ export const loginUser = async (req, res) => {
       },
     });
     if (!foundUserByEmail) {
-      return res.status(400).json("email not found");
+      return res.status(404).json("email not found");
     }
     const areCredentialsValid = await validateCredentials(
       password,
