@@ -37,3 +37,38 @@ export const getAllTasks = async (req, res) => {
     return res.status(400).json({ err: "Unable to find Tasks" });
   }
 };
+
+export const updateTaskById = async (req, res) => {
+  const id = Number(req.params.id);
+  console.log("ID", id);
+
+  if (!req.body.taskName) {
+    return res.status(400).json("Missing task name");
+  }
+
+  if (!req.body.taskDescription) {
+    return res.status(400).json("Missing task description");
+  }
+
+  const foundTask = await dbClient.task.findUnique({
+    where: { id },
+  });
+  console.log("I'm here");
+  console.log("Found Task", foundTask);
+  if (!foundTask) {
+    return res.status(400).json("Unable to find task to update");
+  }
+  try {
+    const updatedTask = await dbClient.task.update({
+      where: { id },
+      data: {
+        taskName: req.body.taskName,
+        taskDescription: req.body.TaskDescription,
+        linksUrl: req.body.linksUrl,
+      },
+    });
+    return res.status(201).json(updatedTask);
+  } catch (err) {
+    return res.status(400).json("Unable to update task");
+  }
+};
