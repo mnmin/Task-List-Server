@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import "express-async-errors";
 import cors from "cors";
-import userRouter from "./routes/users.js";
+import userRouter from "./routes/user.js";
 import { sendDataResponse } from "./utils/responses.js";
 
 //Create a new express application
@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //every router here
 app.use("/user", userRouter);
+//app.use("/task", taskRouter)
 
 app.get("/", (req, res) => {
   res.status(200).json({
