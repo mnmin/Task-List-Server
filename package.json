@@ -1,5 +1,5 @@
 {
-  "name": "test-project",
+  "name": "task-manager-server",
   "version": "1.0.0",
   "type": "module",
   "description": "Server Test Set Up",
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mnmin/Test-Project.git"
+    "url": "git+https://github.com/mnmin/Task-Manager-Server.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mnmin/Test-Project/issues"
+    "url": "https://github.com/mnmin/Task-Manager-Server/issues"
   },
-  "homepage": "https://github.com/mnmin/Test-Project#readme",
+  "homepage": "https://github.com/mnmin/Task-Manager-Server#readme",
   "dependencies": {
     "@prisma/client": "^4.4.0",
     "bcrypt": "^5.1.0",
