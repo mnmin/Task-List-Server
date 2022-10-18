@@ -3,6 +3,8 @@ import express from "express";
 import "express-async-errors";
 import cors from "cors";
 import userRouter from "./routes/user.js";
+import taskRouter from "./routes/task.js";
+import loginRouter from "./routes/login.js";
 import { sendDataResponse } from "./utils/responses.js";
 
 //Create a new express application
@@ -13,7 +15,8 @@ app.use(express.urlencoded({ extended: true }));
 
 //every router here
 app.use("/user", userRouter);
-//app.use("/task", taskRouter)
+app.use("/task", taskRouter);
+app.use("/login", loginRouter);
 
 app.get("/", (req, res) => {
   res.status(200).json({

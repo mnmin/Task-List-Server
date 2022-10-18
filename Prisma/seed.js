@@ -68,7 +68,7 @@ async function seed() {
       console.log("Task", tasks[0]);
     }
   });
-
+  // add then. logic
   console.log("Tasks", tasks);
 }
 

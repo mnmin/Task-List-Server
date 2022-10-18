@@ -1,4 +1,6 @@
 import dbClient from "../utils/dbClient.js";
+import bcrypt from "bcrypt";
+const saltRounds = 10;
 
 export const createUser = async (req, res) => {
   const { email, password, firstName, lastName } = req.body;
@@ -20,11 +22,13 @@ export const createUser = async (req, res) => {
     return res.status(400).json("email already exists");
   }
 
+  const encryptedPw = await bcrypt.hash(password, saltRounds);
+
   try {
     const createdUser = await dbClient.user.create({
       data: {
         email,
-        password,
+        password: encryptedPw,
         profile: {
           create: {
             firstName,
