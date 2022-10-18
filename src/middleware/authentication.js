@@ -8,7 +8,7 @@ export const authentication = async (req, res, next) => {
     const [_, token] = req.get("authorization").split(" ");
 
     const decoded = jwt.verify(token, JWT_SECRET);
-    console.log("decoded", decoded);
+    // console.log("decoded", decoded);
     const user = await dbClient.user.findFirst({
       where: {
         id: decoded.id,

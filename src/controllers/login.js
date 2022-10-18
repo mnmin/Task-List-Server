@@ -5,8 +5,8 @@ import { JWT_EXPIRY, JWT_SECRET } from "../utils/config.js";
 
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  console.log("REQ EMIAL", email);
-  console.log("password", password);
+  // console.log("REQ EMIAL", email);
+  // console.log("password", password);
   if (!email) {
     return res.status(400).json({
       email: "Invalid email provided",
@@ -28,12 +28,9 @@ export const loginUser = async (req, res) => {
     );
     if (!areCredentialsValid) {
       return res.status(400).json({ password: "Invalid Password" });
-      // return sendDataResponse(res, 400, {
-      //   email: "Invalid password",
-      // });
     }
     const token = generateJwt(foundUserByEmail.id);
-    console.log("TOKEN --------------------->", token);
+    // console.log("TOKEN --------------------->", token);
     return res.status(200).json({ token, foundUserByEmail });
   } catch (err) {
     return res

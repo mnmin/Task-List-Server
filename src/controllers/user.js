@@ -45,18 +45,15 @@ export const createUser = async (req, res) => {
 
 export const getUserById = async (req, res) => {
   const userId = Number(req.params.id);
-  console.log("user ID", userId);
+  // console.log("user ID", userId);
 
   try {
     const foundUser = await dbClient.user.findUnique({
       where: {
-        user: {
-          some: {
-            id: userId,
-          },
-        },
+        id: userId,
       },
     });
+    // console.log("Found user", foundUser);
     return res.status(200).json({ user: foundUser });
   } catch (err) {
     return res.status(404).json("User not found");
