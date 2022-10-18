@@ -28,3 +28,12 @@ export const createNewTask = async (req, res) => {
     return res.status(400).json("Unable to create task");
   }
 };
+
+export const getAllTasks = async (req, res) => {
+  try {
+    const allTasks = await dbClient.task.findMany();
+    return res.status(200).json({ allTasks });
+  } catch (err) {
+    return res.status(400).json({ err: "Unable to find Tasks" });
+  }
+};
