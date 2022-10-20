@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 //every router here
 app.use("/user", userRouter);
 app.use("/task", taskRouter);
+app.use("/tasks", taskRouter);
 app.use("/login", loginRouter);
 
 app.get("/", (req, res) => {

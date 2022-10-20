@@ -2,11 +2,12 @@ import dbClient from "../utils/dbClient.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { JWT_EXPIRY, JWT_SECRET } from "../utils/config.js";
+import { sendDataResponse, sendMessageResponse } from "../utils/responses.js";
 
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  // console.log("REQ EMIAL", email);
-  // console.log("password", password);
+  console.log("REQ EMAIL", email);
+  console.log("password", password);
   if (!email) {
     return res.status(400).json({
       email: "Invalid email provided",
@@ -27,15 +28,21 @@ export const loginUser = async (req, res) => {
       foundUserByEmail
     );
     if (!areCredentialsValid) {
-      return res.status(400).json({ password: "Invalid Password" });
+      //return res.status(400).json({ password: "Invalid Password" });
+      return sendDataResponse(res, 400, {
+        email: "Invalid email and/or password provided",
+      });
     }
     const token = generateJwt(foundUserByEmail.id);
-    // console.log("TOKEN --------------------->", token);
-    return res.status(200).json({ token, foundUserByEmail });
-  } catch (err) {
-    return res
-      .status(400)
-      .json({ email: "Invalid email and/or password provided" });
+    console.log("TOKEN --------------------->", token, foundUserByEmail);
+    return sendDataResponse(res, 200, {
+      token,
+      firstName: foundUserByEmail.firstName,
+      lastName: foundUserByEmail.lastName,
+    });
+  } catch (e) {
+    sendMessageResponse(res, 500, "Invalid email and/or password provided");
+    throw e;
   }
 };
 
