@@ -3,9 +3,9 @@ import dbClient from "../utils/dbClient.js";
 
 export const createNewTask = async (req, res) => {
   const { taskName, taskDescription, linksUrl } = req.body;
-  const createdById = Number(req.user.id);
+  const createdById = Number(req.body.user.id);
   // console.log("REQ BODY", taskName, taskDescription, linksUrl);
-  // console.log("CreatedById", createdById);
+  console.log("CreatedById", createdById);
 
   if (!taskName) {
     return res.status(400).json("A task must have a name");
@@ -20,7 +20,7 @@ export const createNewTask = async (req, res) => {
         taskName,
         taskDescription,
         linksUrl,
-        createdById,
+        createdById: createdById,
       },
     });
     // console.log("CREATED TASK", createdTask);
