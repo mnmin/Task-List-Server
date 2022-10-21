@@ -1,3 +1,4 @@
+import { sendDataResponse, sendMessageResponse } from "../utils/responses.js";
 import dbClient from "../utils/dbClient.js";
 
 export const createNewTask = async (req, res) => {
@@ -32,9 +33,11 @@ export const createNewTask = async (req, res) => {
 export const getAllTasks = async (req, res) => {
   try {
     const allTasks = await dbClient.task.findMany();
-    return res.status(200).json({ allTasks });
+    return sendDataResponse(res, 200, allTasks);
+    //return res.status(200).json({ allTasks });
   } catch (err) {
-    return res.status(404).json({ err: "Unable to find Tasks" });
+    return sendMessageResponse(res, 404, "Unable to find Tasks");
+    //return res.status(404).json({ err: "Unable to find Tasks" });
   }
 };
 
