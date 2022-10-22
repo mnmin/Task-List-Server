@@ -7,6 +7,10 @@ export const createNewTask = async (req, res) => {
   // console.log("REQ BODY", taskName, taskDescription, linksUrl);
   console.log("CreatedById", createdById);
 
+  if (createdById === Number.NaN || createdById === 0) {
+    return res.status(400).json("The userId is wrong");
+  }
+
   if (!taskName) {
     return res.status(400).json("A task must have a name");
   }
