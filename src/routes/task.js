@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createNewTask,
   getAllTasks,
+  getTaskByUserId,
   updateTaskById,
   deleteTaskById,
 } from "../controllers/task.js";
@@ -11,7 +12,8 @@ const router = Router();
 
 router.post("/", authentication, createNewTask);
 router.get("/", authentication, getAllTasks);
-router.put("/:id", authentication, updateTaskById);
+router.get("/:id", authentication, getTaskByUserId);
+router.patch("/:id", authentication, updateTaskById);
 router.delete("/:id", authentication, deleteTaskById);
 
 export default router;

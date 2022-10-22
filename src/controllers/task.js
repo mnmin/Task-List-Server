@@ -41,9 +41,48 @@ export const getAllTasks = async (req, res) => {
   }
 };
 
+// export const getTaskByUserId = async (req, res) => {
+//   const id = Number(req.params.id);
+//   // console.log("ID", id);
+
+//   try {
+//     const foundUser = await User.findById(id);
+
+//     if (!foundUser) {
+//       return res.status(404).json("The provided use has");
+//     }
+
+//     return sendDataResponse(res, 200, foundUser);
+//   } catch (err) {
+//     return sendMessageResponse(res, 404, "Unable to find this user's tasks");
+//   }
+// };
+
+export const getTaskByUserId = async (req, res) => {
+  const userId = Number(req.params.id);
+  // console.log("USER ID------------->", userId);
+  const selectedTasks = await dbClient.task.findMany({
+    where: { createdById: userId },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  const notFound = selectedTasks.length === 0;
+  // console.log("SELECT TASK------------->", selectTask);
+  if (notFound) {
+    return sendMessageResponse(
+      res,
+      404,
+      "Tasks with that user id do not exist"
+    );
+  }
+  // console.log("RETURN---------->", selectedTasks);
+  return sendDataResponse(res, 200, { tasks: selectedTasks });
+};
+
 export const updateTaskById = async (req, res) => {
   const id = Number(req.params.id);
-  // console.log("ID", id);
+  console.log("ID", id);
 
   if (!req.body.taskName) {
     return res.status(400).json("Missing task name");
