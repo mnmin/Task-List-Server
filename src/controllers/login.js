@@ -28,7 +28,6 @@ export const loginUser = async (req, res) => {
       foundUserByEmail
     );
     if (!areCredentialsValid) {
-      //return res.status(400).json({ password: "Invalid Password" });
       return sendDataResponse(res, 400, {
         email: "Invalid email and/or password provided",
       });

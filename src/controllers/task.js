@@ -4,12 +4,11 @@ import dbClient from "../utils/dbClient.js";
 export const createNewTask = async (req, res) => {
   const { taskName, taskDescription, linksUrl } = req.body;
   const createdById = Number(req.body.user.id);
-  // console.log("REQ BODY", taskName, taskDescription, linksUrl);
-  console.log("CreatedById", createdById);
-
   if (createdById === Number.NaN || createdById === 0) {
     return res.status(400).json("The userId is wrong");
   }
+  // console.log("REQ BODY", taskName, taskDescription, linksUrl);
+  // console.log("CreatedById", createdById);
 
   if (!taskName) {
     return res.status(400).json("A task must have a name");
@@ -35,8 +34,13 @@ export const createNewTask = async (req, res) => {
 };
 
 export const getAllTasks = async (req, res) => {
+  console.log("I am here");
   try {
-    const allTasks = await dbClient.task.findMany();
+    const allTasks = await dbClient.task.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
     return sendDataResponse(res, 200, allTasks);
     //return res.status(200).json({ allTasks });
   } catch (err) {
@@ -45,26 +49,9 @@ export const getAllTasks = async (req, res) => {
   }
 };
 
-// export const getTaskByUserId = async (req, res) => {
-//   const id = Number(req.params.id);
-//   // console.log("ID", id);
-
-//   try {
-//     const foundUser = await User.findById(id);
-
-//     if (!foundUser) {
-//       return res.status(404).json("The provided use has");
-//     }
-
-//     return sendDataResponse(res, 200, foundUser);
-//   } catch (err) {
-//     return sendMessageResponse(res, 404, "Unable to find this user's tasks");
-//   }
-// };
-
 export const getTaskByUserId = async (req, res) => {
   const userId = Number(req.params.id);
-  // console.log("USER ID------------->", userId);
+  console.log("USER ID------------->", userId);
   const selectedTasks = await dbClient.task.findMany({
     where: { createdById: userId },
     orderBy: {
@@ -72,7 +59,7 @@ export const getTaskByUserId = async (req, res) => {
     },
   });
   const notFound = selectedTasks.length === 0;
-  // console.log("SELECT TASK------------->", selectTask);
+  console.log("SELECT TASK------------->", selectedTasks);
   if (notFound) {
     return sendMessageResponse(
       res,
@@ -80,13 +67,13 @@ export const getTaskByUserId = async (req, res) => {
       "Tasks with that user id do not exist"
     );
   }
-  // console.log("RETURN---------->", selectedTasks);
-  return sendDataResponse(res, 200, { tasks: selectedTasks });
+  console.log("RETURN---------->", selectedTasks);
+  return sendDataResponse(res, 200, selectedTasks);
 };
 
 export const updateTaskById = async (req, res) => {
   const id = Number(req.params.id);
-  console.log("ID", id);
+  // console.log("ID", id);
 
   if (!req.body.taskName) {
     return res.status(400).json("Missing task name");
@@ -109,7 +96,7 @@ export const updateTaskById = async (req, res) => {
       where: { id },
       data: {
         taskName: req.body.taskName,
-        taskDescription: req.body.TaskDescription,
+        taskDescription: req.body.taskDescription,
         linksUrl: req.body.linksUrl,
       },
     });
