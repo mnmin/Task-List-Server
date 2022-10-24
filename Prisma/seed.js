@@ -94,6 +94,35 @@ async function seed() {
     }
   });
   console.log("Topics", topics);
+
+  const checkListIterator = 4;
+
+  const checkLists = [];
+
+  const createCheckList = async (iter, task) => {
+    console.log("TASK ------------->", task);
+    const newCheckListItem = await prisma.checkList.create({
+      data: {
+        description: `checklist description${iter}`,
+        task: {
+          connect: {
+            id: task.id,
+          },
+        },
+      },
+    });
+    console.log("newCheckListItem------------------>", newCheckListItem);
+    return newCheckListItem;
+  };
+
+  tasks.forEach(async (task) => {
+    for (let i = 1; i <= checkListIterator; i++) {
+      let checkList = await createCheckList(i, task);
+      checkLists.push(checkList);
+      console.log("CheckList", checkList[0]);
+    }
+  });
+  console.log("CheckList", checkLists);
 }
 
 seed().catch(async (error) => {
