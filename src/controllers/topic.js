@@ -43,7 +43,27 @@ export const getAllTopics = async (req, res) => {
   }
 };
 
-// export const getTopicByUserId = async (req, res) => {};
+export const getTopicByUserId = async (req, res) => {
+  const userId = Number(req.params.id);
+  //   console.log("USER ID------------->", userId);
+  const selectedTopics = await dbClient.topic.findMany({
+    where: { userId: userId },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  const notFound = selectedTopics.length === 0;
+  //   console.log("SELECT TASK------------->", selectedTopics);
+  if (notFound) {
+    return sendMessageResponse(
+      res,
+      404,
+      "Topics with that user id do not exist"
+    );
+  }
+  //   console.log("RETURN---------->", selectedTopics);
+  return sendDataResponse(res, 200, selectedTopics);
+};
 
 // export const updateTopicById = async (req, res) => {};
 
