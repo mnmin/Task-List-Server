@@ -44,7 +44,7 @@ app.use((error, req, res, next) => {
   return sendDataResponse(res, 500);
 });
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 4100;
 
 app.listen(port, () => {
   console.log(`\n Server is running on port http://localhost:${port}\n`);
