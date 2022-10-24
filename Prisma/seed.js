@@ -43,7 +43,6 @@ async function seed() {
   const tasks = [];
 
   const createTask = async (iter, user) => {
-    //console.log("user", user, iter);
     const newtask = await prisma.task.create({
       data: {
         taskName: `task${iter} name`,
@@ -53,11 +52,6 @@ async function seed() {
           connect: {
             id: user.id,
           },
-          // topics: {
-          //   conntect: {
-          //     id: topic.id,
-          //   },
-          // },
         },
       },
     });
@@ -67,13 +61,11 @@ async function seed() {
   users.forEach(async (user) => {
     for (let i = 1; i <= taskIterator; i++) {
       let task = await createTask(i, user);
-      //console.log("Task", task);
-      //tasks.push(await createTask(i, user));
       tasks.push(task);
       console.log("Task", tasks[0]);
     }
   });
-  // add then. logic
+
   console.log("Tasks", tasks);
 
   const topicIterator = 4;
@@ -81,7 +73,6 @@ async function seed() {
   const topics = [];
 
   const createTopic = async (iter, user) => {
-    console.log("USER---TOPIC------->", user);
     const newTopic = await prisma.topic.create({
       data: {
         topicName: `topic${iter} name`,
@@ -92,7 +83,6 @@ async function seed() {
         },
       },
     });
-    console.log("NEW TOPIC----------->", newTopic);
     return newTopic;
   };
 
