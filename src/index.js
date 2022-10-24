@@ -5,6 +5,7 @@ import cors from "cors";
 import userRouter from "./routes/user.js";
 import taskRouter from "./routes/task.js";
 import loginRouter from "./routes/login.js";
+import topicRouter from "./routes/topic.js";
 import { sendDataResponse } from "./utils/responses.js";
 
 //Create a new express application
@@ -19,6 +20,8 @@ app.use("/user", userRouter);
 app.use("/task", taskRouter);
 app.use("/tasks", taskRouter);
 app.use("/login", loginRouter);
+app.use("/topics", topicRouter);
+app.use("/topic", topicRouter);
 
 // app.get("/", (req, res) => {
 //   res.status(200).json({
