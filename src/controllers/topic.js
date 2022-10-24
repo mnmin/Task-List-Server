@@ -65,6 +65,48 @@ export const getTopicByUserId = async (req, res) => {
   return sendDataResponse(res, 200, selectedTopics);
 };
 
-// export const updateTopicById = async (req, res) => {};
+export const updateTopicById = async (req, res) => {
+  const id = Number(req.params.id);
+  console.log("ID", id);
 
-// export const deleteTopicById = async (req, res) => {};
+  if (!req.body.topicName) {
+    return res.status(400).json("Missing topic name");
+  }
+
+  const foundTopic = await dbClient.topic.findUnique({
+    where: { id },
+  });
+  if (!foundTopic) {
+    return res.status(404).json("Unable to find topic to update");
+  }
+  try {
+    const updatedTopic = await dbClient.topic.update({
+      where: { id },
+      data: {
+        topicName: req.body.topicName,
+      },
+    });
+    return res.status(201).json(updatedTopic);
+  } catch (err) {
+    return res.status(400).json("Unable to update topic");
+  }
+};
+
+export const deleteTopicById = async (req, res) => {
+  const id = Number(req.params.id);
+
+  const foundTopic = await dbClient.topic.findUnique({
+    where: { id },
+  });
+
+  if (!foundTopic) {
+    return res.status(404).json("Unable to find topic to delete");
+  }
+
+  try {
+    const deletedTopic = await dbClient.topic.delete({ where: { id } });
+    return res.status(200).json(deletedTopic);
+  } catch (err) {
+    return res.status(400).json("Unable to delete topic");
+  }
+};
