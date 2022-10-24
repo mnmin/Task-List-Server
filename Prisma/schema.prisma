@@ -35,16 +35,17 @@ model Profile {
 }
 
 model Task {
-    id              Int      @id @default(autoincrement())
-    taskName        String   @db.VarChar(30)
+    id              Int         @id @default(autoincrement())
+    taskName        String      @db.VarChar(30)
     taskDescription String
-    linksUrl        String?  @db.VarChar(255)
-    status          Status   @default(INPROGRESS)
+    linksUrl        String?     @db.VarChar(255)
+    status          Status      @default(INPROGRESS)
     createdById     Int
-    createdBy       User     @relation("created-by", fields: [createdById], references: [id], onDelete: Cascade)
+    createdBy       User        @relation("created-by", fields: [createdById], references: [id], onDelete: Cascade)
     topics          Int[]
-    createdAt       DateTime @default(now())
-    updatedAt       DateTime @updatedAt
+    checkLists      CheckList[]
+    createdAt       DateTime    @default(now())
+    updatedAt       DateTime    @updatedAt
 }
 
 model Topic {
@@ -52,6 +53,15 @@ model Topic {
     topicName String   @db.VarChar(30)
     userId    Int
     user      User     @relation(fields: [userId], references: [id])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model CheckList {
+    id        Int      @id @default(autoincrement())
+    content   String   @db.VarChar(60)
+    taskId    Int
+    task      Task     @relation(fields: [taskId], references: [id])
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
