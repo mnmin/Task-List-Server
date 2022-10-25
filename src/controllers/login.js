@@ -6,8 +6,8 @@ import { sendDataResponse, sendMessageResponse } from "../utils/responses.js";
 
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  console.log("REQ EMAIL", email);
-  console.log("password", password);
+  // console.log("REQ EMAIL", email);
+  // console.log("password", password);
   if (!email) {
     return res.status(400).json({
       email: "Invalid email provided",
@@ -33,7 +33,7 @@ export const loginUser = async (req, res) => {
       });
     }
     const token = generateJwt(foundUserByEmail.id);
-    console.log("TOKEN --------------------->", token, foundUserByEmail);
+    // console.log("TOKEN --------------------->", token, foundUserByEmail);
     return sendDataResponse(res, 200, {
       token,
       firstName: foundUserByEmail.firstName,

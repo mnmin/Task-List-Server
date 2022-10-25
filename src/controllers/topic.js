@@ -21,7 +21,6 @@ export const createNewTopic = async (req, res) => {
         userId: userId,
       },
     });
-    // console.log("CREATED TASK", createdTask);
     return res.status(201).json({ topic: createdTopic });
   } catch (err) {
     return res.status(400).json("Unable to create topic");
@@ -36,10 +35,8 @@ export const getAllTopics = async (req, res) => {
       },
     });
     return sendDataResponse(res, 200, allTopics);
-    //return res.status(200).json({ allTasks });
   } catch (err) {
     return sendMessageResponse(res, 404, "Unable to find Topics");
-    //return res.status(404).json({ err: "Unable to find Tasks" });
   }
 };
 
@@ -67,7 +64,7 @@ export const getTopicByUserId = async (req, res) => {
 
 export const updateTopicById = async (req, res) => {
   const id = Number(req.params.id);
-  console.log("ID", id);
+  //   console.log("ID", id);
 
   if (!req.body.topicName) {
     return res.status(400).json("Missing topic name");

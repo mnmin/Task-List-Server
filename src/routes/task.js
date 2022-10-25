@@ -25,10 +25,5 @@ router.delete(
   authentication,
   deleteCheckListItemById
 );
-// router.delete(
-//   '/:postId/comment/:commentId',
-//   validateAuthentication,
-//   deleteComment
-// )
 
 export default router;

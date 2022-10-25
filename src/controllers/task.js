@@ -51,7 +51,7 @@ export const getAllTasks = async (req, res) => {
 
 export const getTaskByUserId = async (req, res) => {
   const userId = Number(req.params.id);
-  console.log("USER ID------------->", userId);
+  // console.log("USER ID------------->", userId);
   const selectedTasks = await dbClient.task.findMany({
     where: { createdById: userId },
     orderBy: {
@@ -59,7 +59,7 @@ export const getTaskByUserId = async (req, res) => {
     },
   });
   const notFound = selectedTasks.length === 0;
-  console.log("SELECT TASK------------->", selectedTasks);
+  // console.log("SELECT TASK------------->", selectedTasks);
   if (notFound) {
     return sendMessageResponse(
       res,
@@ -67,7 +67,7 @@ export const getTaskByUserId = async (req, res) => {
       "Tasks with that user id do not exist"
     );
   }
-  console.log("RETURN---------->", selectedTasks);
+  // console.log("RETURN---------->", selectedTasks);
   return sendDataResponse(res, 200, selectedTasks);
 };
 
@@ -131,8 +131,8 @@ export const createCheckListItem = async (req, res) => {
   if (taskId === Number.NaN || taskId === 0) {
     return res.status(400).json("The task Id is wrong");
   }
-  console.log("CHECKLIST CONTENT", content);
-  console.log("TASK ID", taskId);
+  // console.log("CHECKLIST CONTENT---------->", content);
+  // console.log("TASK ID----------->", taskId);
 
   if (!content) {
     return res.status(400).json("A checklist item must have content");
@@ -154,7 +154,7 @@ export const createCheckListItem = async (req, res) => {
 
 export const deleteCheckListItemById = async (req, res) => {
   const id = Number(req.params.checkListId);
-  console.log("CHECKLIST REQ BODY---------->", req);
+  // console.log("CHECKLIST REQ BODY---------->", req);
 
   const foundCheckListItem = await dbClient.checkList.findUnique({
     where: { id },
