@@ -2,13 +2,14 @@ import { sendDataResponse, sendMessageResponse } from "../utils/responses.js";
 import dbClient from "../utils/dbClient.js";
 
 export const createNewTask = async (req, res) => {
-  const { taskName, taskDescription, linksUrl } = req.body;
+  const { taskName, taskDescription, linksUrl, status, topics, priority } =
+    req.body;
   const createdById = Number(req.body.user.id);
   if (createdById === Number.NaN || createdById === 0) {
     return res.status(400).json("The userId is wrong");
   }
-  // console.log("REQ BODY", taskName, taskDescription, linksUrl);
-  // console.log("CreatedById", createdById);
+  console.log("REQ BODY", taskName, taskDescription, linksUrl);
+  console.log("CreatedById", createdById);
 
   if (!taskName) {
     return res.status(400).json("A task must have a name");
@@ -23,10 +24,13 @@ export const createNewTask = async (req, res) => {
         taskName,
         taskDescription,
         linksUrl,
+        status,
+        topics,
+        priority,
         createdById: createdById,
       },
     });
-    // console.log("CREATED TASK", createdTask);
+    console.log("CREATED TASK", createdTask);
     return res.status(201).json({ task: createdTask });
   } catch (err) {
     return res.status(400).json("Unable to create task");
@@ -98,6 +102,9 @@ export const updateTaskById = async (req, res) => {
         taskName: req.body.taskName,
         taskDescription: req.body.taskDescription,
         linksUrl: req.body.linksUrl,
+        status: req.body.status,
+        priority: req.body.priority,
+        topic: req.body.topic,
       },
     });
     return res.status(201).json(updatedTask);
@@ -108,10 +115,11 @@ export const updateTaskById = async (req, res) => {
 
 export const deleteTaskById = async (req, res) => {
   const id = Number(req.params.id);
-
+  console.log("CONSOLE LOG---------->", id);
   const foundTask = await dbClient.task.findUnique({
     where: { id },
   });
+  console.log("FOUND TASK");
 
   if (!foundTask) {
     return res.status(404).json("Unable to find task to delete");

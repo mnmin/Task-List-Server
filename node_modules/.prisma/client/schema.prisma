@@ -11,6 +11,7 @@ datasource db {
 enum Status {
     INPROGRESS
     COMPLETED
+    TODO
 }
 
 enum Priority {
@@ -41,18 +42,18 @@ model Profile {
 }
 
 model Task {
-    id              Int         @id @default(autoincrement())
-    taskName        String      @db.VarChar(30)
+    id              Int      @id @default(autoincrement())
+    taskName        String   @db.VarChar(30)
     taskDescription String
-    linksUrl        String?     @db.VarChar(255)
-    status          Status      @default(INPROGRESS)
-    priority        Priority    @default(HIGH)
+    linksUrl        String?  @db.VarChar(255)
+    status          Status   @default(TODO)
+    priority        Priority @default(HIGH)
     createdById     Int
-    createdBy       User        @relation("created-by", fields: [createdById], references: [id], onDelete: Cascade)
-    topics          Int[]
-    checkLists      CheckList[]
-    createdAt       DateTime    @default(now())
-    updatedAt       DateTime    @updatedAt
+    createdBy       User     @relation("created-by", fields: [createdById], references: [id], onDelete: Cascade)
+    topics          String[]
+    // checkLists      CheckList[]
+    createdAt       DateTime @default(now())
+    updatedAt       DateTime @updatedAt
 }
 
 model Topic {
@@ -64,11 +65,11 @@ model Topic {
     updatedAt DateTime @updatedAt
 }
 
-model CheckList {
-    id        Int      @id @default(autoincrement())
-    content   String   @db.VarChar(60)
-    taskId    Int
-    task      Task     @relation(fields: [taskId], references: [id])
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
+// model CheckList {
+//     id        Int      @id @default(autoincrement())
+//     content   String   @db.VarChar(60)
+//     taskId    Int
+//     task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+//     createdAt DateTime @default(now())
+//     updatedAt DateTime @updatedAt
+// }

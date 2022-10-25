@@ -91,7 +91,7 @@ export const updateTopicById = async (req, res) => {
 
 export const deleteTopicById = async (req, res) => {
   const id = Number(req.params.id);
-
+  //   console.log("ID--------->", id);
   const foundTopic = await dbClient.topic.findUnique({
     where: { id },
   });

@@ -43,6 +43,7 @@ async function seed() {
         taskName: `task${iter} name`,
         taskDescription: `task${iter} description`,
         linksUrl: `task${iter} URL`,
+        topics: [`task${iter} topic${iter}`, `task${iter} topic${iter + 1}`],
         createdBy: {
           connect: {
             id: userId,
@@ -81,31 +82,31 @@ async function seed() {
   }
   console.log("Topics", topics);
 
-  const checkListIterator = 1;
-  const checkLists = [];
-  const createCheckList = async (iter, taskId) => {
-    const newCheckListItem = await prisma.checkList.create({
-      data: {
-        content: `checklist description${iter}`,
-        task: {
-          connect: {
-            id: taskId,
-          },
-        },
-      },
-    });
-    return newCheckListItem;
-  };
-  for (let taskIter = 1; taskIter <= tasks.length; taskIter++) {
-    for (
-      let checklistIter = 1;
-      checklistIter <= checkListIterator;
-      checklistIter++
-    ) {
-      checkLists.push(await createCheckList(checklistIter, taskIter));
-    }
-  }
-  console.log("CheckList", checkLists);
+  //   const checkListIterator = 1;
+  //   const checkLists = [];
+  //   const createCheckList = async (iter, taskId) => {
+  //     const newCheckListItem = await prisma.checkList.create({
+  //       data: {
+  //         content: `checklist description${iter}`,
+  //         task: {
+  //           connect: {
+  //             id: taskId,
+  //           },
+  //         },
+  //       },
+  //     });
+  //     return newCheckListItem;
+  //   };
+  //   for (let taskIter = 1; taskIter <= tasks.length; taskIter++) {
+  //     for (
+  //       let checklistIter = 1;
+  //       checklistIter <= checkListIterator;
+  //       checklistIter++
+  //     ) {
+  //       checkLists.push(await createCheckList(checklistIter, taskIter));
+  //     }
+  //   }
+  //   console.log("CheckList", checkLists);
 }
 
 seed().catch(async (error) => {
