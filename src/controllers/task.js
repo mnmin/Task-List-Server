@@ -124,3 +124,52 @@ export const deleteTaskById = async (req, res) => {
     return res.status(400).json("Unable to delete task");
   }
 };
+
+export const createCheckListItem = async (req, res) => {
+  const { content } = req.body;
+  const taskId = Number(req.body.task.id);
+  if (taskId === Number.NaN || taskId === 0) {
+    return res.status(400).json("The task Id is wrong");
+  }
+  console.log("CHECKLIST CONTENT", content);
+  console.log("TASK ID", taskId);
+
+  if (!content) {
+    return res.status(400).json("A checklist item must have content");
+  }
+
+  try {
+    const createdCheckListItem = await dbClient.checkList.create({
+      data: {
+        content,
+        taskId: taskId,
+      },
+    });
+    // console.log("CREATED TASK", createdTask);
+    return res.status(201).json({ checkList: createdCheckListItem });
+  } catch (err) {
+    return res.status(400).json("Unable to create checklist item");
+  }
+};
+
+export const deleteCheckListItemById = async (req, res) => {
+  const id = Number(req.params.checkListId);
+  console.log("CHECKLIST REQ BODY---------->", req);
+
+  const foundCheckListItem = await dbClient.checkList.findUnique({
+    where: { id },
+  });
+
+  if (!foundCheckListItem) {
+    return res.status(404).json("Unable to find checklist item to delete");
+  }
+
+  try {
+    const deletedCheckListItem = await dbClient.checkList.delete({
+      where: { id },
+    });
+    return res.status(200).json(deletedCheckListItem);
+  } catch (err) {
+    return res.status(400).json("Unable to delete checklist item");
+  }
+};

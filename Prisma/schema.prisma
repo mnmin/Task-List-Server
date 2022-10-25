@@ -13,6 +13,12 @@ enum Status {
     COMPLETED
 }
 
+enum Priority {
+    HIGH
+    MEDIUM
+    LOW
+}
+
 model User {
     id            Int      @id @default(autoincrement())
     email         String   @unique
@@ -40,6 +46,7 @@ model Task {
     taskDescription String
     linksUrl        String?     @db.VarChar(255)
     status          Status      @default(INPROGRESS)
+    priority        Priority    @default(HIGH)
     createdById     Int
     createdBy       User        @relation("created-by", fields: [createdById], references: [id], onDelete: Cascade)
     topics          Int[]

@@ -7,7 +7,6 @@ async function seed() {
   const password = await bcrypt.hash("123", 3);
 
   const userIterator = 3;
-
   const users = [];
   const createUser = async (email, password, firstName, lastName) => {
     const newUser = await prisma.user.create({
@@ -24,7 +23,6 @@ async function seed() {
     });
     return newUser;
   };
-
   for (let i = 1; i <= userIterator; i++) {
     users.push(
       await createUser(
@@ -35,14 +33,11 @@ async function seed() {
       )
     );
   }
-
   console.log("Users", users);
 
   const taskIterator = 6;
-
   const tasks = [];
-
-  const createTask = async (iter, user) => {
+  const createTask = async (iter, userId) => {
     const newtask = await prisma.task.create({
       data: {
         taskName: `task${iter} name`,
@@ -50,83 +45,71 @@ async function seed() {
         linksUrl: `task${iter} URL`,
         createdBy: {
           connect: {
-            id: user.id,
+            id: userId,
           },
         },
       },
     });
     return newtask;
   };
-
-  users.forEach(async (user) => {
-    for (let i = 1; i <= taskIterator; i++) {
-      let task = await createTask(i, user);
-      tasks.push(task);
-      console.log("Task", tasks[0]);
+  for (let userIter = 1; userIter <= users.length; userIter++) {
+    for (let taskIter = 1; taskIter <= taskIterator; taskIter++) {
+      tasks.push(await createTask(taskIter, userIter));
     }
-  });
-
+  }
   console.log("Tasks", tasks);
 
-  const topicIterator = 4;
-
+  const topicIterator = 1;
   const topics = [];
-
-  const createTopic = async (iter, user) => {
+  const createTopic = async (iter, userId) => {
     const newTopic = await prisma.topic.create({
       data: {
         topicName: `topic${iter} name`,
         user: {
           connect: {
-            id: user.id,
+            id: userId,
           },
         },
       },
     });
     return newTopic;
   };
-
-  users.forEach(async (user) => {
-    for (let i = 1; i <= topicIterator; i++) {
-      let topic = await createTopic(i, user);
-      topics.push(topic);
-      console.log("Topics", topics[0]);
+  for (let userIter = 1; userIter <= users.length; userIter++) {
+    for (let topicIter = 1; topicIter <= topicIterator; topicIter++) {
+      topics.push(await createTopic(topicIter, userIter));
     }
-  });
+  }
   console.log("Topics", topics);
 
-  const checkListIterator = 4;
-
+  const checkListIterator = 1;
   const checkLists = [];
-
-  const createCheckList = async (iter, task) => {
-    console.log("TASK ------------->", task);
+  const createCheckList = async (iter, taskId) => {
     const newCheckListItem = await prisma.checkList.create({
       data: {
-        description: `checklist description${iter}`,
+        content: `checklist description${iter}`,
         task: {
           connect: {
-            id: task.id,
+            id: taskId,
           },
         },
       },
     });
-    console.log("newCheckListItem------------------>", newCheckListItem);
     return newCheckListItem;
   };
-
-  tasks.forEach(async (task) => {
-    for (let i = 1; i <= checkListIterator; i++) {
-      let checkList = await createCheckList(i, task);
-      checkLists.push(checkList);
-      console.log("CheckList", checkList[0]);
+  for (let taskIter = 1; taskIter <= tasks.length; taskIter++) {
+    for (
+      let checklistIter = 1;
+      checklistIter <= checkListIterator;
+      checklistIter++
+    ) {
+      checkLists.push(await createCheckList(checklistIter, taskIter));
     }
-  });
+  }
   console.log("CheckList", checkLists);
 }
 
 seed().catch(async (error) => {
-  console.error(error);
+  console.error("Error", error);
   await prisma.$disconnect();
   process.exit(1);
 });
