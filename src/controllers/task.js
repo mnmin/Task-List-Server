@@ -53,6 +53,53 @@ export const getAllTasks = async (req, res) => {
   }
 };
 
+export const getAllTasksByUserIdAndPriority = async (req, res) => {
+  const userId = Number(req.params.id);
+  const taskSortOrder = Number(req.params.priorityOrder);
+  // console.log("CHECKLIST REQ BODY---------->", req);
+  console.log("I am here by priority", userId, taskSortOrder);
+  let priorityOrderBy = taskSortOrder === 1 ? "asc" : "desc"
+
+  if(userId > 0) {
+    const foundUser = await dbClient.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+  
+    if(foundUser) {
+      try {
+        const allTasks = await dbClient.task.findMany({
+          where: {
+            createdById: userId,
+          },
+          orderBy: {
+            priority: priorityOrderBy,
+          },
+        });
+        return sendDataResponse(res, 200, allTasks);
+      } catch (err) {
+        return sendMessageResponse(res, 404, "Unable to find Tasks");
+      }
+    }
+  } else {
+    try {
+      const allTasks = await dbClient.task.findMany({
+        where: {
+          createdById: { gt: userId, },
+        },
+        orderBy: {
+          priority: priorityOrderBy,
+        },
+      });
+      return sendDataResponse(res, 200, allTasks);
+    } catch (err) {
+      return sendMessageResponse(res, 404, "Unable to find Tasks");
+    }
+  }
+  return sendMessageResponse(res, 404, "User not found");
+};
+
 export const getTaskByUserId = async (req, res) => {
   const userId = Number(req.params.id);
   // console.log("USER ID------------->", userId);
@@ -104,7 +151,7 @@ export const updateTaskById = async (req, res) => {
         linksUrl: req.body.linksUrl,
         status: req.body.status,
         priority: req.body.priority,
-        topic: req.body.topic,
+        topics: req.body.topics,
       },
     });
     return res.status(201).json(updatedTask);
