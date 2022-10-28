@@ -58,12 +58,14 @@ export const getAllTasksByUserIdAndPriority = async (req, res) => {
   const userId = Number(req.params.id);
   const taskSortOrder = Number(req.params.priorityOrder);
   const taskPriorityValues = req.params.priorityValues;
+  const taskStatusValues = req.params.statusValues;
   // console.log("CHECKLIST REQ BODY---------->", req);
   console.log(
     "I am here by priority",
     userId,
     taskSortOrder,
-    taskPriorityValues
+    taskPriorityValues,
+    taskStatusValues
   );
   let priorityOrderBy =
     taskSortOrder === 1 ? "asc" : taskSortOrder === 2 ? "desc" : "null";
@@ -74,7 +76,14 @@ export const getAllTasksByUserIdAndPriority = async (req, res) => {
       prio = taskPriorityValues.split("-");
     }
   }
-  console.log("SPLIT", prio, "SPLIT", taskPriorityValues.split("-"));
+  let st = ["COMPLETED", "INPROGRESS", "TODO"];
+  if (taskStatusValues) {
+    if (taskStatusValues !== "*ALL") {
+      st = taskStatusValues.split("-");
+    }
+  }
+  console.log("SPLIT PRIORITY", prio, "SPLIT", taskPriorityValues.split("-"));
+  console.log("SPLIT STATUS  ", st, "SPLIT", taskStatusValues.split("-"));
   if (userId > 0) {
     const foundUser = await dbClient.user.findUnique({
       where: {
@@ -87,13 +96,17 @@ export const getAllTasksByUserIdAndPriority = async (req, res) => {
           where: {
             createdById: userId,
             priority: { in: prio.map((priori) => priori) },
+            status: { in: st.map((stat) => stat) },
           },
           orderBy: [
             {
               priority: priorityOrderBy,
             },
             {
-              updatedAt: "desc",
+              status: priorityOrderBy,
+            },
+            {
+              updatedAt: priorityOrderBy,
             },
           ],
         });
@@ -108,13 +121,17 @@ export const getAllTasksByUserIdAndPriority = async (req, res) => {
         where: {
           createdById: { gt: userId },
           priority: { in: prio.map((priori) => priori) },
+          status: { in: st.map((stat) => stat) },
         },
         orderBy: [
           {
             priority: priorityOrderBy,
           },
           {
-            updatedAt: "desc",
+            status: priorityOrderBy,
+          },
+          {
+            updatedAt: priorityOrderBy,
           },
         ],
       });
@@ -181,7 +198,7 @@ export const updateTaskById = async (req, res) => {
         linksUrl: req.body.linksUrl,
         status: req.body.status,
         priority: req.body.priority,
-        topic: req.body.topic,
+        topics: req.body.topics,
       },
     });
     return res.status(201).json(updatedTask);
