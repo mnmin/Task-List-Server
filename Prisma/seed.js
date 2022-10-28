@@ -41,8 +41,8 @@ async function seed() {
     const newtask = await prisma.task.create({
       data: {
         taskName: `task${iter} name`,
-        taskDescription: `task${iter} description`,
-        linksUrl: `task${iter} URL`,
+        taskDescription: `task${iter} Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
+        linksUrl: 'https://en.wikipedia.org/wiki/Lorem_ipsum',
         topics: [`task${iter} topic${iter}`, `task${iter} topic${iter + 1}`],
         createdBy: {
           connect: {

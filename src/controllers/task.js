@@ -38,11 +38,11 @@ export const createNewTask = async (req, res) => {
 };
 
 export const getAllTasks = async (req, res) => {
-  console.log("I am here");
+  console.log("I am here getAllTasks");
   try {
     const allTasks = await dbClient.task.findMany({
       orderBy: {
-        createdAt: "desc",
+        updatedAt: "desc",
       },
     });
     return sendDataResponse(res, 200, allTasks);
@@ -53,13 +53,80 @@ export const getAllTasks = async (req, res) => {
   }
 };
 
+export const getAllTasksByUserIdAndPriority = async (req, res) => {
+  console.log("I am here getAllTasksByUserIdAndPriority");
+  const userId = Number(req.params.id);
+  const taskSortOrder = Number(req.params.priorityOrder);
+  const taskPriorityValues = req.params.priorityValues;
+  // console.log("CHECKLIST REQ BODY---------->", req);
+  console.log("I am here by priority", userId, taskSortOrder, taskPriorityValues);
+  let priorityOrderBy = taskSortOrder === 1 ? "asc" : taskSortOrder === 2 ? "desc" : "null"
+
+  let prio = ["HIGH", "MEDIUM", "LOW"];
+  if(taskPriorityValues) {
+    if(taskPriorityValues !== "*ALL") {
+        prio = taskPriorityValues.split('-');
+    }
+  }
+  console.log("SPLIT", prio, "SPLIT", taskPriorityValues.split('-'))
+  if(userId > 0) {
+    const foundUser = await dbClient.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    if(foundUser) {
+      try {
+        const allTasks = await dbClient.task.findMany({
+          where: {
+              createdById: userId,
+              priority: { in: prio.map((priori) => priori) }
+            },
+          orderBy: [
+            {
+              priority: priorityOrderBy,
+            },
+            {
+              updatedAt: "desc",
+            },
+          ],          
+        });
+        return sendDataResponse(res, 200, allTasks);
+      } catch (err) {
+        return sendMessageResponse(res, 404, "Unable to find Tasks for user");
+      }
+    }
+  } else {
+    try {
+      const allTasks = await dbClient.task.findMany({
+        where: {
+          createdById: { gt: userId, },
+          priority: { in: prio.map((priori) => priori) }
+        },
+        orderBy: [
+          {
+            priority: priorityOrderBy,
+          },
+          {
+            updatedAt: "desc",
+          },
+        ], 
+      });
+      return sendDataResponse(res, 200, allTasks);
+    } catch (err) {
+      return sendMessageResponse(res, 404, "Unable to find Tasks for all users");
+    }
+  }
+  return sendMessageResponse(res, 404, "User not found");
+};
+
 export const getTaskByUserId = async (req, res) => {
   const userId = Number(req.params.id);
   // console.log("USER ID------------->", userId);
   const selectedTasks = await dbClient.task.findMany({
     where: { createdById: userId },
     orderBy: {
-      createdAt: "desc",
+      updatedAt: "desc",
     },
   });
   const notFound = selectedTasks.length === 0;
@@ -104,7 +171,7 @@ export const updateTaskById = async (req, res) => {
         linksUrl: req.body.linksUrl,
         status: req.body.status,
         priority: req.body.priority,
-        topic: req.body.topic,
+        topics: req.body.topics,
       },
     });
     return res.status(201).json(updatedTask);

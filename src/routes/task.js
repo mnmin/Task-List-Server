@@ -3,6 +3,7 @@ import {
   createNewTask,
   getAllTasks,
   getTaskByUserId,
+  getAllTasksByUserIdAndPriority,
   updateTaskById,
   deleteTaskById,
   createCheckListItem,
@@ -14,6 +15,7 @@ const router = Router();
 
 router.post("/", authentication, createNewTask);
 router.get("/", authentication, getAllTasks);
+router.get("/:id/priorityOrder/:priorityOrder/priorityValues/:priorityValues", authentication, getAllTasksByUserIdAndPriority);
 router.get("/:id", authentication, getTaskByUserId);
 router.patch("/:id", authentication, updateTaskById);
 router.delete("/:id", authentication, deleteTaskById);
