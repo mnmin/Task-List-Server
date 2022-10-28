@@ -24,7 +24,6 @@ router.get(
 router.get("/:id", authentication, getTaskByUserId);
 router.patch("/:id", authentication, updateTaskById);
 router.delete("/:id", authentication, deleteTaskById);
-
 router.post("/:taskId/checkList", authentication, createCheckListItem);
 // router.get("/:taskId/", authentication, getAllChecklistItems);
 router.delete(
